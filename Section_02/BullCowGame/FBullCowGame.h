@@ -5,9 +5,19 @@ The game is a simple guess the word game based on Mastermind
 
 #pragma once
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <random>
+#include <map>
+#include <algorithm>
+#include <vector>
+
+#define TMap std::map
 
 // to make syntax Unreal friendly
 using FString = std::string;
+using FText = std::string;
 using int32 = int;
 
 struct FBullCowCount
@@ -32,19 +42,34 @@ public:
 
 	void Reset();
 
-	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
 	int32 GetHiddenWordLength() const;
+	int32 GetMinLetters() const;
+	int32 GetMaxLetters() const;
 	bool IsGameWon() const;
+	FString GetHiddenWord(int32) const;
 	EGuessStatus CheckGuessValidity(FString) const;
 
 	FBullCowCount SubmitValidGuess(FString);
+	void LoadDictionary();
+	void PlayGame();
+	void PrintIntro();
+	int32 SetWordLength();
+	void SetMaxTries(int32);
+	void GuessLoop();
+	FText GetValidGuess();
+	bool WantsToPlayAgain();
+	void PrintGameSummary();
 
 // ^^ Please try to ignore this and focus on the interface above ^^
 private:
 	// see constructor for initialization
 	int32 MyCurrentTry;
+	int32 MinLetters;
+	int32 MaxLetters;
+	int32 MaxTries;
 	FString MyHiddenWord;
+	TMap<int32, std::vector<FString>> Dictionary;
 	bool bGameIsWon;
 
 	bool IsIsogram(FString) const;
